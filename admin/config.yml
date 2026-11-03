@@ -1,15 +1,15 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: 18625735128-sys/love-story
   branch: main
-media_folder: "images"
-public_folder: "images"
+media_folder: "uploads"
+public_folder: "/uploads"
 collections:
-  - name: stories
-    label: 故事记录
-    folder: data
+  - name: story
+    label: 故事
+    folder: "content/story"
     create: true
-    slug: "{{date}}"
     fields:
-      - {label: 日期, name: date, widget: string}
-      - {label: 内容, name: content, widget: text}
-      - {label: 照片, name: photos, widget: list, field: {label:图片, name:img, widget:image}}
+      - {name: title, label: 标题}
+      - {name: date, label: 日期, widget: datetime}
+      - {name: body, label: 正文, widget: markdown}
