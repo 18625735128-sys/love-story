@@ -226,7 +226,6 @@
         </div>
     </div>
     <div class="timeline" id="list">
-        <!-- 示例故事卡片，你在后台新增故事后，后续我再给你自动读取md的方案 -->
         <div class="item">
             <div class="dot"></div>
             <div class="card">
@@ -254,7 +253,6 @@
             });
         }
 
-        // 相恋天数，修改这里的日期
         const startDate = new Date("2025-06-20");
         function calcDay(){
             const now = new Date();
@@ -263,7 +261,6 @@
         }
         calcDay();
 
-        // 漂浮爱心
         function createHeart(){
             const heart = document.createElement("div");
             heart.className="heart";
@@ -275,7 +272,6 @@
         }
         setInterval(createHeart,800);
 
-        // 背景音乐按钮
         const musicBtn = document.getElementById("musicBtn");
         const bgMusic = document.getElementById("bgMusic");
         musicBtn.onclick = ()=>{
@@ -288,7 +284,6 @@
             }
         }
 
-        // 鼠标跟随小爱心
         document.addEventListener("mousemove",(e)=>{
             const h = document.createElement("div");
             h.className="mouse-heart";
