@@ -1,6 +1,5 @@
 backend:
-  name: github
-  repo: 18625735128-sys/love-story
+  name: git-gateway
   branch: main
 media_folder: uploads
 public_folder: /uploads
