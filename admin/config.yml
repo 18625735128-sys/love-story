@@ -1,0 +1,15 @@
+backend:
+  name: git-gateway
+  branch: main
+media_folder: "images"
+public_folder: "images"
+collections:
+  - name: stories
+    label: 故事记录
+    folder: data
+    create: true
+    slug: "{{date}}"
+    fields:
+      - {label: 日期, name: date, widget: string}
+      - {label: 内容, name: content, widget: text}
+      - {label: 照片, name: photos, widget: list, field: {label:图片, name:img, widget:image}}
