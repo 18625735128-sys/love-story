@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我们的故事 💖 Hello Kitty</title>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/dist/marked.min.js"></script>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
         * {
@@ -198,6 +198,7 @@
         }
         .edit-tip a{
             color:#e66894;
+            font-size:17px;
         }
     </style>
 </head>
@@ -225,12 +226,23 @@
         </div>
     </div>
     <div class="timeline" id="list">
-        <div class="loading">🎀 正在加载属于我们的小故事...</div>
+        <!-- 示例故事卡片，你在后台新增故事后，后续我再给你自动读取md的方案 -->
+        <div class="item">
+            <div class="dot"></div>
+            <div class="card">
+                <h2><span class="bow">🎀</span>第一篇小故事</h2>
+                <div class="date">📅 2025-06-20</div>
+                <div class="content">
+                    这是我们故事开始的地方，往后的每一天，都想和你慢慢度过。
+                </div>
+            </div>
+        </div>
     </div>
     <button class="music-btn" id="musicBtn">🎵</button>
     <audio id="bgMusic" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
     
+
     <script>
         if (window.netlifyIdentity) {
             window.netlifyIdentity.on("init", user => {
@@ -241,40 +253,17 @@
                 }
             });
         }
-        const repoApi = "https://api.github.com/repos/18625735128-sys/love-story/contents/content/story";
-        fetch(repoApi)
-        .then(res=>res.json())
-        .then(files=>{
-            const wrap = document.getElementById("list");
-            wrap.innerHTML = "";
-            const mdList = files.filter(f=>f.name.endsWith(".md"));
-            mdList.sort((a,b)=>new Date(b.commit.committer.date)-new Date(a.commit.committer.date));
-            mdList.forEach(file=>{
-                fetch(file.download_url)
-                .then(r=>r.text())
-                .then(raw=>{
-                    const title = raw.match(/^#\s*(.+)/)?.[1] || file.name.replace(".md","");
-                    const dateMatch = raw.match(/(\d{4}[-\/]\d{1,2}[-\/]\d{1,2})/);
-                    const dateStr = dateMatch ? dateMatch[1] : "未知日期";
-                    const body = raw.replace(/^#.+[\r\n]+/,"");
-                    const html = marked.parse(body);
-                    const dom = `
-                        <div class="item">
-                            <div class="dot"></div>
-                            <div class="card">
-                                <h2><span class="bow">🎀</span>${title}</h2>
-                                <div class="date">📅 ${dateStr}</div>
-                                <div class="content">${html}</div>
-                            </div>
-                        </div>
-                    `;
-                    wrap.insertAdjacentHTML("beforeend",dom);
-                })
-            })
-        })
-        .catch(()=>{
-            document.getElementById("list").innerHTML="<div style='text-align:center;color:#cc88aa;padding:30px'>🎀 加载失败，刷新试试看哦</div>";
-        })
+
+        // 相恋天数，修改这里的日期
+        const startDate = new Date("2025-06-20");
+        function calcDay(){
+            const now = new Date();
+            const diff = Math.floor((now - startDate)/(1000*60*60*24));
+            document.getElementById("dayCount").innerText = diff + " 天 💖";
+        }
+        calcDay();
+
+        // 漂浮爱心
         function createHeart(){
             const heart = document.createElement("div");
             heart.className="heart";
@@ -285,6 +274,8 @@
             setTimeout(()=>heart.remove(),7000);
         }
         setInterval(createHeart,800);
+
+        // 背景音乐按钮
         const musicBtn = document.getElementById("musicBtn");
         const bgMusic = document.getElementById("bgMusic");
         musicBtn.onclick = ()=>{
@@ -296,6 +287,8 @@
                 musicBtn.innerText="🔇";
             }
         }
+
+        // 鼠标跟随小爱心
         document.addEventListener("mousemove",(e)=>{
             const h = document.createElement("div");
             h.className="mouse-heart";
@@ -305,13 +298,6 @@
             document.body.appendChild(h);
             setTimeout(()=>h.remove(),600);
         })
-        const startDate = new Date("2025-06-20");
-        function calcDay(){
-            const now = new Date();
-            const diff = Math.floor((now - startDate)/(1000*60*60*24));
-            document.getElementById("dayCount").innerText = diff + " 天 💖";
-        }
-        calcDay();
     </script>
 </body>
 </html>
