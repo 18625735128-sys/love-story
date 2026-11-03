@@ -1,14 +1,16 @@
 backend:
   name: git-gateway
   branch: main
-media_folder: uploads
-public_folder: /uploads
+media_folder: "uploads"
+public_folder: "uploads"
 collections:
   - name: story
-    label: 故事
+    label: 小故事
     folder: content/story
     create: true
+    slug: "{{title}}"
+    extension: md
     fields:
-      - {name: title, label: 标题}
-      - {name: date, label: 日期, widget: datetime}
-      - {name: body, label: 正文, widget: markdown}
+      - {label: "标题", name: "title", widget: "string"}
+      - {label: "日期", name: "date", widget: "date"}
+      - {label: "正文内容", name: "body", widget: "markdown"}
