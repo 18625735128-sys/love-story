@@ -1,12 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Content Manager</title>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我们的故事 💖 Hello Kitty</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        body {
+            background-color: #fff0f6;
+            background-image: radial-gradient(#ffd6e7 6%, transparent 6%);
+            background-size: 30px 30px;
+            color: #774455;
+            line-height: 1.7;
+            padding: 40px 16px;
+            max-width: 920px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+        .kitty-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #f078a4;
+            font-size: 38px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .sub {
+            color: #bb7896;
+            font-size: 17px;
+            margin: 4px 0;
+        }
+        .timeline {
+            position: relative;
+        }
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 22px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #ffc8dd;
+            border-radius: 3px;
+        }
+        .item {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 45px;
+        }
+        .dot {
+            width: 20px;
+            height: 20px;
+            background: #f078a4;
+            border-radius: 50%;
+            position: absolute;
+            left: 13px;
+            top: 8px;
+            box-shadow: 0 0 0 4px #ffd6e7;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 26px;
+            box-shadow: 0 5px 16px #f7c6d877;
+            border: 2px solid #ffe1ec;
+        }
+        .card h2 {
+            color: #e66894;
+            margin-bottom: 8px;
+            font-size: 23px;
+        }
+        .date {
+            color: #c97898;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+        .content {
+            color: #774455;
+        }
+        .loading {
+            text-align: center;
+            color: #cc88aa;
+            padding: 40px;
+            font-size:18px;
+        }
+        .bow {
+            display:inline-block;
+            margin-right:6px;
+        }
+    </style>
 </head>
 <body>
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+    <div class="header">
+        <div class="kitty-icon">🎀</div>
+        <h1>我们的故事</h1>
+        <div class="sub">始于某个温柔的日子</div>
+        <div class="sub">爱是慢慢记录，岁岁相伴 🐱</div>
+    </div>
+
+    <div class="timeline" id="list">
+        <div class="loading">🎀 正在加载属于我们的小故事...</div>
+    </div>
+
+    <script>
+        const repoApi = "https://api.github.com/repos/18625735128-sys/love-story/contents/content/story";
+        fetch(repoApi)
+        .then(res=>res.json())
+        .then(files=>{
+            const wrap = document.getElementById("list");
+            wrap.innerHTML = "";
+            const mdList = files.filter(f=>f.name.endsWith(".md"));
+            mdList.sort((a,b)=>new Date(b.commit.committer.date)-new Date(a.commit.committer.date));
+            mdList.forEach(file=>{
+                fetch(file.download_url)
+                .then(r=>r.text())
+                .then(raw=>{
+                    const title = raw.match(/^#\s*(.+)/)?.[1] || file.name.replace(".md","");
+                    const dateMatch = raw.match(/(\d{4}[-\/]\d{1,2}[-\/]\d{1,2})/);
+                    const dateStr = dateMatch ? dateMatch[1] : "未知日期";
+                    const body = raw.replace(/^#.+[\r\n]+/,"");
+                    const html = marked.parse(body);
+                    const dom = `
+                        <div class="item">
+                            <div class="dot"></div>
+                            <div class="card">
+                                <h2><span class="bow">🎀</span>${title}</h2>
+                                <div class="date">📅 ${dateStr}</div>
+                                <div class="content">${html}</div>
+                            </div>
+                        </div>
+                    `;
+                    wrap.insertAdjacentHTML("beforeend",dom);
+                })
+            })
+        })
+        .catch(()=>{
+            document.getElementById("list").innerHTML="<div style='text-align:center;color:#cc88aa;padding:30px'>🎀 加载失败，刷新试试看哦</div>";
+        })
+    </script>
 </body>
 </html>
