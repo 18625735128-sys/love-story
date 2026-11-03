@@ -2,12 +2,12 @@ backend:
   name: github
   repo: 18625735128-sys/love-story
   branch: main
-media_folder: "uploads"
-public_folder: "/uploads"
+media_folder: uploads
+public_folder: /uploads
 collections:
   - name: story
     label: 故事
-    folder: "content/story"
+    folder: content/story
     create: true
     fields:
       - {name: title, label: 标题}
