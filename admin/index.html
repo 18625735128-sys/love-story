@@ -21,13 +21,15 @@
             padding: 40px 16px;
             max-width: 920px;
             margin: 0 auto;
+            overflow-x: hidden;
         }
         .header {
             text-align: center;
-            margin-bottom: 70px;
+            margin-bottom: 40px;
+            position: relative;
         }
         .kitty-icon {
-            font-size: 48px;
+            font-size: 56px;
             margin-bottom: 10px;
         }
         h1 {
@@ -40,6 +42,59 @@
             color: #bb7896;
             font-size: 17px;
             margin: 4px 0;
+        }
+        /* 倒计时卡片 */
+        .count-card{
+            background:#fff;
+            border:2px solid #ffe1ec;
+            border-radius:24px;
+            padding:20px;
+            text-align:center;
+            box-shadow:0 5px 16px #f7c6d877;
+            margin-bottom:40px;
+        }
+        .count-card h3{
+            color:#e66894;
+            margin-bottom:10px;
+        }
+        .count-num{
+            font-size:28px;
+            color:#f078a4;
+            font-weight:bold;
+        }
+        /* 相册模块 */
+        .album-wrap{
+            margin-bottom:50px;
+        }
+        .album-wrap h3{
+            text-align:center;
+            color:#e66894;
+            font-size:24px;
+            margin-bottom:16px;
+        }
+        .album{
+            display:grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
+            gap:14px;
+        }
+        .photo-item{
+            background:#fff;
+            border:2px solid #ffe1ec;
+            border-radius:20px;
+            overflow:hidden;
+            aspect-ratio:1;
+            box-shadow:0 4px 12px #f7c6d860;
+        }
+        .photo-item img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+        }
+        .photo-tip{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#c97898;
         }
         .timeline {
             position: relative;
@@ -75,6 +130,11 @@
             padding: 26px;
             box-shadow: 0 5px 16px #f7c6d877;
             border: 2px solid #ffe1ec;
+            transition: transform 0.3s ease;
+            position:relative;
+        }
+        .card:hover {
+            transform: translateY(-4px);
         }
         .card h2 {
             color: #e66894;
@@ -99,19 +159,79 @@
             display:inline-block;
             margin-right:6px;
         }
+        /* 漂浮爱心 */
+        .heart {
+            position: fixed;
+            color: #ff99bb;
+            font-size: 20px;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            z-index: -1;
+        }
+        @keyframes float {
+            0% {transform: translateY(100vh) rotate(0deg); opacity:0;}
+            10% {opacity:1;}
+            90% {opacity:1;}
+            100% {transform: translateY(-100vh) rotate(360deg); opacity:0;}
+        }
+        /* 音乐按钮 */
+        .music-btn{
+            position: fixed;
+            bottom:24px;
+            right:24px;
+            width:48px;
+            height:48px;
+            border-radius:50%;
+            border:none;
+            background:#ffb8d1;
+            color:#fff;
+            font-size:20px;
+            box-shadow:0 3px 10px #f0a8c480;
+            cursor:pointer;
+        }
+        /* 鼠标爱心 */
+        .mouse-heart{
+            position:fixed;
+            pointer-events:none;
+            color:#ff7ca8;
+            font-size:14px;
+            opacity:0.8;
+        }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="kitty-icon">🎀</div>
+        <div class="kitty-icon">🐱🎀</div>
         <h1>我们的故事</h1>
         <div class="sub">始于某个温柔的日子</div>
-        <div class="sub">爱是慢慢记录，岁岁相伴 🐱</div>
+        <div class="sub">爱是慢慢记录，岁岁相伴 🎀</div>
+    </div>
+
+    <!-- 相恋倒计时【在这里修改你们在一起的日期】 -->
+    <div class="count-card">
+        <h3>🎀 我们在一起已经</h3>
+        <div class="count-num" id="dayCount"></div>
+    </div>
+
+    <!-- 相册区域，后续图片传到 uploads 文件夹，替换src -->
+    <div class="album-wrap">
+        <h3>📸 我们的相册</h3>
+        <div class="album">
+            <div class="photo-item photo-tip">照片位置</div>
+            <div class="photo-item photo-tip">照片位置</div>
+            <div class="photo-item photo-tip">照片位置</div>
+            <div class="photo-item photo-tip">照片位置</div>
+        </div>
     </div>
 
     <div class="timeline" id="list">
         <div class="loading">🎀 正在加载属于我们的小故事...</div>
     </div>
+
+    <button class="music-btn" id="musicBtn">🎵</button>
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+    
 
     <script>
         const repoApi = "https://api.github.com/repos/18625735128-sys/love-story/contents/content/story";
@@ -148,6 +268,51 @@
         .catch(()=>{
             document.getElementById("list").innerHTML="<div style='text-align:center;color:#cc88aa;padding:30px'>🎀 加载失败，刷新试试看哦</div>";
         })
+
+        // 漂浮爱心
+        function createHeart(){
+            const heart = document.createElement("div");
+            heart.className="heart";
+            heart.innerText="♡";
+            heart.style.left = Math.random()*100+"vw";
+            heart.style.animationDuration = (4+Math.random()*4)+"s";
+            document.body.appendChild(heart);
+            setTimeout(()=>heart.remove(),7000);
+        }
+        setInterval(createHeart,800);
+
+        // 背景音乐开关
+        const musicBtn = document.getElementById("musicBtn");
+        const bgMusic = document.getElementById("bgMusic");
+        musicBtn.onclick = ()=>{
+            if(bgMusic.paused){
+                bgMusic.play();
+                musicBtn.innerText="🔊";
+            }else{
+                bgMusic.pause();
+                musicBtn.innerText="🔇";
+            }
+        }
+
+        // 鼠标跟随爱心
+        document.addEventListener("mousemove",(e)=>{
+            const h = document.createElement("div");
+            h.className="mouse-heart";
+            h.innerText="♡";
+            h.style.left = e.pageX+"px";
+            h.style.top = e.pageY+"px";
+            document.body.appendChild(h);
+            setTimeout(()=>h.remove(),600);
+        })
+
+        // ========== 修改这里的日期！格式 "2024-02-14" 换成你们纪念日 ==========
+        const startDate = new Date("2025-07-11");
+        function calcDay(){
+            const now = new Date();
+            const diff = Math.floor((now - startDate)/(1000*60*60*24));
+            document.getElementById("dayCount").innerText = diff + " 天 💖";
+        }
+        calcDay();
     </script>
 </body>
 </html>
