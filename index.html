@@ -1,81 +1,298 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>我们的故事</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft Yahei",sans-serif}
-body{background:#fff5f7;color:#444;line-height:1.7}
-#lock-page{position:fixed;inset:0;background:#fff5f7;display:flex;align-items:center;justify-content:center;z-index:999}
-.lock-box{background:#fff;padding:32px;border-radius:16px;box-shadow:0 4px 20px #00000015;text-align:center;width:90%;max-width:400px}
-.lock-box h2{color:#e86b84;margin-bottom:18px}
-#pwd-input{width:100%;padding:12px;border:1px solid #f2c4cd;border-radius:8px;font-size:16px;margin-bottom:14px;outline:none}
-#unlock-btn{width:100%;padding:12px;border:none;background:#e86b84;color:#fff;border-radius:8px;font-size:16px;cursor:pointer}
-#main{display:none;padding:20px 16px;max-width:900px;margin:0 auto}
-header{text-align:center;margin-bottom:40px}
-header h1{color:#e86b84;margin-bottom:8px;font-size:26px}
-.time-item{background:#fff;border-radius:12px;padding:18px;margin-bottom:20px;box-shadow:0 2px 12px #00000008}
-.time-date{color:#e86b84;font-weight:bold;margin-bottom:8px;font-size:17px}
-.photo-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px}
-.photo-row img{width:100%;border-radius:10px;object-fit:cover;aspect-ratio:4/3}
-footer{text-align:center;margin-top:50px;color:#aaa;font-size:14px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我们的故事 💖 Hello Kitty</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/dist/marked.min.js"></script>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        body {
+            background-color: #fff0f6;
+            background-image: radial-gradient(#ffd6e7 6%, transparent 6%);
+            background-size: 30px 30px;
+            color: #774455;
+            line-height: 1.7;
+            padding: 40px 16px;
+            max-width: 920px;
+            margin: 0 auto;
+            overflow-x: hidden;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        .kitty-icon {
+            font-size: 56px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #f078a4;
+            font-size: 38px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .sub {
+            color: #bb7896;
+            font-size: 17px;
+            margin: 4px 0;
+        }
+        .count-card{
+            background:#fff;
+            border:2px solid #ffe1ec;
+            border-radius:24px;
+            padding:20px;
+            text-align:center;
+            box-shadow:0 5px 16px #f7c6d877;
+            margin-bottom:40px;
+        }
+        .count-card h3{
+            color:#e66894;
+            margin-bottom:10px;
+        }
+        .count-num{
+            font-size:28px;
+            color:#f078a4;
+            font-weight:bold;
+        }
+        .album-wrap{
+            margin-bottom:50px;
+        }
+        .album-wrap h3{
+            text-align:center;
+            color:#e66894;
+            font-size:24px;
+            margin-bottom:16px;
+        }
+        .album{
+            display:grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px,1fr));
+            gap:14px;
+        }
+        .photo-item{
+            background:#fff;
+            border:2px solid #ffe1ec;
+            border-radius:20px;
+            overflow:hidden;
+            aspect-ratio:1;
+            box-shadow:0 4px 12px #f7c6d860;
+        }
+        .photo-item img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+        }
+        .photo-tip{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#c97898;
+        }
+        .timeline {
+            position: relative;
+        }
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 22px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #ffc8dd;
+            border-radius: 3px;
+        }
+        .item {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 45px;
+        }
+        .dot {
+            width: 20px;
+            height: 20px;
+            background: #f078a4;
+            border-radius: 50%;
+            position: absolute;
+            left: 13px;
+            top: 8px;
+            box-shadow: 0 0 0 4px #ffd6e7;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 26px;
+            box-shadow: 0 5px 16px #f7c6d877;
+            border: 2px solid #ffe1ec;
+            transition: transform 0.3s ease;
+            position:relative;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+        }
+        .card h2 {
+            color: #e66894;
+            margin-bottom: 8px;
+            font-size: 23px;
+        }
+        .date {
+            color: #c97898;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+        .content {
+            color: #774455;
+        }
+        .loading {
+            text-align: center;
+            color: #cc88aa;
+            padding: 40px;
+            font-size:18px;
+        }
+        .bow {
+            display:inline-block;
+            margin-right:6px;
+        }
+        .heart {
+            position: fixed;
+            color: #ff99bb;
+            font-size: 20px;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+            z-index: -1;
+        }
+        @keyframes float {
+            0% {transform: translateY(100vh) rotate(0deg); opacity:0;}
+            10% {opacity:1;}
+            90% {opacity:1;}
+            100% {transform: translateY(-100vh) rotate(360deg); opacity:0;}
+        }
+        .music-btn{
+            position: fixed;
+            bottom:24px;
+            right:24px;
+            width:48px;
+            height:48px;
+            border-radius:50%;
+            border:none;
+            background:#ffb8d1;
+            color:#fff;
+            font-size:20px;
+            box-shadow:0 3px 10px #f0a8c480;
+            cursor:pointer;
+        }
+        .mouse-heart{
+            position:fixed;
+            pointer-events:none;
+            color:#ff7ca8;
+            font-size:14px;
+            opacity:0.8;
+        }
+        .edit-tip{
+            text-align:center;margin:20px 0;
+        }
+        .edit-tip a{
+            color:#e66894;
+            font-size:17px;
+        }
+    </style>
 </head>
 <body>
-<div id="lock-page">
-  <div class="lock-box">
-    <h2>🔐 进入我们的故事</h2>
-    <input type="password" id="pwd-input" placeholder="请输入访问密码">
-    <button id="unlock-btn">查看</button>
-  </div>
-</div>
-
-<div id="main">
-  <header>
-    <h1>我们的故事</h1>
-    <p>始于某个温柔的日子</p>
-  </header>
-  <div id="story-list"></div>
-  <footer>
-    <p>爱是慢慢记录，岁岁相伴</p>
-  </footer>
-</div>
-
-<script>
-// 页面访问密码，之后你可以在这里修改
-const PASSWD = "123456";
-const lockPage = document.getElementById("lock-page");
-const mainPage = document.getElementById("main");
-const pwdInput = document.getElementById("pwd-input");
-const unlockBtn = document.getElementById("unlock-btn");
-const storyWrap = document.getElementById("story-list");
-
-unlockBtn.onclick = async ()=>{
-  if(pwdInput.value === PASSWD){
-    lockPage.style.display = "none";
-    mainPage.style.display = "block";
-    const res = await fetch("./data/stories.json");
-    const list = await res.json();
-    let html = "";
-    list.forEach(item=>{
-      let imgHtml = "";
-      if(item.photos && item.photos.length>0){
-        imgHtml = `<div class="photo-row">${item.photos.map(url=>`<img src="${url}" alt="合照">`).join("")}</div>`
-      }
-      html += `
-        <div class="time-item">
-          <div class="time-date">${item.date}</div>
-          <p>${item.content}</p>
-          ${imgHtml}
+    <div class="header">
+        <div class="kitty-icon">🐱🎀</div>
+        <h1>我们的故事</h1>
+        <div class="sub">始于某个温柔的日子</div>
+        <div class="sub">爱是慢慢记录，岁岁相伴 🎀</div>
+    </div>
+    <div class="edit-tip">
+        <a href="/admin">🎀 点这里进入后台新增/修改故事</a>
+    </div>
+    <div class="count-card">
+        <h3>🎀 我们在一起已经</h3>
+        <div class="count-num" id="dayCount"></div>
+    </div>
+    <div class="album-wrap">
+        <h3>📸 我们的相册</h3>
+        <div class="album">
+            <div class="photo-item photo-tip">照片位置</div>
+            <div class="photo-item photo-tip">照片位置</div>
+            <div class="photo-item photo-tip">照片位置</div>
+            <div class="photo-item photo-tip">照片位置</div>
         </div>
-      `
-    })
-    storyWrap.innerHTML = html;
-  }else{
-    alert("密码错误");
-  }
-}
-</script>
+    </div>
+    <div class="timeline" id="list">
+        <div class="item">
+            <div class="dot"></div>
+            <div class="card">
+                <h2><span class="bow">🎀</span>第一篇小故事</h2>
+                <div class="date">📅 2025-06-20</div>
+                <div class="content">
+                    这是我们故事开始的地方，往后的每一天，都想和你慢慢度过。
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class="music-btn" id="musicBtn">🎵</button>
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+    
+
+    <script>
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on("init", user => {
+                if (!user) {
+                    window.netlifyIdentity.on("login", () => {
+                        document.location.href = "/admin/";
+                    });
+                }
+            });
+        }
+
+        const startDate = new Date("2025-06-20");
+        function calcDay(){
+            const now = new Date();
+            const diff = Math.floor((now - startDate)/(1000*60*60*24));
+            document.getElementById("dayCount").innerText = diff + " 天 💖";
+        }
+        calcDay();
+
+        function createHeart(){
+            const heart = document.createElement("div");
+            heart.className="heart";
+            heart.innerText="♡";
+            heart.style.left = Math.random()*100+"vw";
+            heart.style.animationDuration = (4+Math.random()*4)+"s";
+            document.body.appendChild(heart);
+            setTimeout(()=>heart.remove(),7000);
+        }
+        setInterval(createHeart,800);
+
+        const musicBtn = document.getElementById("musicBtn");
+        const bgMusic = document.getElementById("bgMusic");
+        musicBtn.onclick = ()=>{
+            if(bgMusic.paused){
+                bgMusic.play();
+                musicBtn.innerText="🔊";
+            }else{
+                bgMusic.pause();
+                musicBtn.innerText="🔇";
+            }
+        }
+
+        document.addEventListener("mousemove",(e)=>{
+            const h = document.createElement("div");
+            h.className="mouse-heart";
+            h.innerText="♡";
+            h.style.left = e.pageX+"px";
+            h.style.top = e.pageY+"px";
+            document.body.appendChild(h);
+            setTimeout(()=>h.remove(),600);
+        })
+    </script>
 </body>
 </html>
