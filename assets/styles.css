@@ -1,1 +1,179 @@
-
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Microsoft YaHei", sans-serif;
+  background-color: #fff0f6;
+  color: #552840;
+  background-image: radial-gradient(#ffd6e7 6%, transparent 6%);
+  background-size: 30px 30px;
+  min-height: 100vh;
+  padding: 20px 12px;
+}
+.container {
+  max-width: 780px;
+  margin: 0 auto;
+}
+.header-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 30px 24px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(255,160,190,0.25);
+  border: 2px solid #ffcce0;
+  position: relative;
+  overflow: hidden;
+}
+.header-card::before {
+  content: "🐱";
+  position: absolute;
+  top: 10px;
+  left: 16px;
+  font-size: 28px;
+  opacity: 0.7;
+}
+.header-card::after {
+  content: "🐱";
+  position: absolute;
+  top: 10px;
+  right: 16px;
+  font-size: 28px;
+  opacity: 0.7;
+}
+.title {
+  font-size: 26px;
+  color: #d86894;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.desc {
+  color: #995577;
+  margin-bottom: 16px;
+}
+.count-day {
+  font-size: 20px;
+  color: #c75884;
+  font-weight: 600;
+}
+.add-btn-wrap {
+  text-align: center;
+  margin: 24px 0;
+}
+#addStoryBtn {
+  background: #ff96bb;
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 999px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px #ffb3cb;
+  transition: all 0.2s ease;
+}
+#addStoryBtn:hover {
+  background: #ff78a8;
+  transform: translateY(-2px);
+}
+.story-item {
+  background: #fff;
+  border-radius: 20px;
+  padding: 22px;
+  margin-bottom: 18px;
+  border: 2px solid #ffdde8;
+  box-shadow: 0 3px 10px rgba(255,170,196,0.18);
+}
+.story-date {
+  color: #e07098;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.story-title {
+  font-size: 19px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #b84e78;
+}
+.story-content {
+  line-height: 1.75;
+}
+.story-ops {
+  margin-top:14px;
+  display:flex;
+  gap:10px;
+}
+.story-ops button {
+  padding:6px 12px;
+  border-radius:12px;
+  border:1px solid #ffb8d0;
+  background:#fff4f8;
+  color:#c2547e;
+  cursor:pointer;
+}
+/* 弹窗样式 */
+.modal-wrap {
+  position: fixed;
+  inset:0;
+  background:rgba(0,0,0,0.4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+  z-index:999;
+  display:none;
+}
+.modal {
+  background:#fff;
+  width:100%;
+  max-width:600px;
+  border-radius:24px;
+  padding:26px;
+  border:2px solid #ffc8dd;
+}
+.modal h3 {
+  color:#d0608c;
+  margin-bottom:16px;
+  text-align:center;
+}
+.modal input, .modal textarea {
+  width:100%;
+  border:1px solid #ffc2d8;
+  border-radius:14px;
+  padding:12px;
+  margin-bottom:12px;
+  font-size:15px;
+  background:#fffafc;
+}
+.modal textarea {
+  min-height:180px;
+  resize:vertical;
+}
+.modal-buttons {
+  display:flex;
+  gap:12px;
+  justify-content:flex-end;
+  margin-top:10px;
+}
+.modal-buttons button {
+  padding:10px 20px;
+  border-radius:14px;
+  border:none;
+  cursor:pointer;
+}
+#saveStory {
+  background:#ff8fb3;
+  color:white;
+}
+#closeModal {
+  background:#f1f1f1;
+  color:#666;
+}
+@media (max-width:600px){
+  .title {
+    font-size:22px;
+  }
+  .header-card {
+    padding:22px 16px;
+  }
+}
